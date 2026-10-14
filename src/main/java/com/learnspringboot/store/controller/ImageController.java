@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("${api.prefix}/image")
+@RequestMapping("${api.prefix}/images")
 public class ImageController {
     private final IImageService imageService;
 

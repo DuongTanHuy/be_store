@@ -1,6 +1,7 @@
 package com.learnspringboot.store.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -29,12 +30,12 @@ public class Product {
     private int inventory;
     private String description;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> images;
+    private List<Image> images = new ArrayList<>();
 
     public Product(String name, String brand, BigDecimal price, int inventory, String description, Category category) {
         this.name = name;
@@ -45,3 +46,5 @@ public class Product {
         this.category = category;
     }
 }
+
+// chỉ cần CartItem biết product là đủ, không cần quan hệ 2 chiều

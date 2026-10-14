@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("${api.prefix}/category")
+@RequestMapping("${api.prefix}/categories")
 public class CategoryController {
     private final ICategoryService categoryService;
 

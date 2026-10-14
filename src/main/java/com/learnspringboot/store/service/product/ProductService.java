@@ -24,8 +24,7 @@ public class ProductService implements IProductService {
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
-    @Override
-    public ProductDto mapToProductDto(Product product) {
+    private ProductDto mapToProductDto(Product product) {
         // ProductDto productDto = new ProductDto();
         // productDto.setId(product.getId());
         // productDto.setName(product.getName());
@@ -59,8 +58,7 @@ public class ProductService implements IProductService {
         return productDto;
     }
 
-    @Override
-    public List<ProductDto> mapToListProductDto(List<Product> products) {
+    private List<ProductDto> mapToListProductDto(List<Product> products) {
         return products.stream().map(this::mapToProductDto).toList();
     }
 

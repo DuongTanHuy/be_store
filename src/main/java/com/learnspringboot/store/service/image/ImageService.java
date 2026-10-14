@@ -46,12 +46,16 @@ public class ImageService implements IImageService {
     @Override
     public void deleteImage(Long id) {
         imageRepository.findById(id).ifPresentOrElse(imageRepository::delete,
-                () -> new ResourceNotFoundException("Image not found!"));
+                () -> {
+                    throw new ResourceNotFoundException("Image not found!");
+                });
     }
 
     @Override
     public List<ImageDto> saveImages(List<MultipartFile> files, Long productId) {
-        Product product = productRepository.getReferenceById(productId);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found!"));
+
         List<ImageDto> savedImageDtos = new ArrayList<>();
 
         for (MultipartFile file : files) {

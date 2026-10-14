@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("${api.prefix}/product")
+@RequestMapping("${api.prefix}/products")
 public class ProductController {
     private final IProductService productService;
 
