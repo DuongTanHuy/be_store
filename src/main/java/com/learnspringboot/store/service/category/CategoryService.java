@@ -3,8 +3,10 @@ package com.learnspringboot.store.service.category;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.learnspringboot.store.dto.CategoryDto;
 import com.learnspringboot.store.exceptions.AlreadyExistsException;
 import com.learnspringboot.store.exceptions.ResourceNotFoundException;
 import com.learnspringboot.store.model.Category;
@@ -16,35 +18,59 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryService implements ICategoryService {
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
 
-    @Override
-    public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found!"));
+    private CategoryDto mapToCategoryDto(Category category) {
+        return modelMapper.map(category, CategoryDto.class);
+    }
+
+    private List<CategoryDto> mapToCategoryDtoList(List<Category> categories) {
+        return categories.stream().map(this::mapToCategoryDto).toList();
     }
 
     @Override
-    public Category getCategoryByName(String name) {
-        return categoryRepository.findByName(name);
+    public CategoryDto getCategoryById(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found!"));
+
+        return mapToCategoryDto(category);
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public CategoryDto getCategoryByName(String name) {
+        Category category = categoryRepository.findByName(name);
+
+        return mapToCategoryDto(category);
     }
 
     @Override
-    public Category createCategory(Category category) {
+    public List<CategoryDto> getAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+
+        return mapToCategoryDtoList(categories);
+    }
+
+    @Override
+    public CategoryDto createCategory(Category category) {
         return Optional.of(category).filter(c -> !categoryRepository.existsByName(c.getName()))
-                .map(categoryRepository::save)
+                .map(cate -> {
+                    Category newCategory = categoryRepository.save(cate);
+
+                    return mapToCategoryDto(newCategory);
+                })
                 .orElseThrow(() -> new AlreadyExistsException(category.getName() + " already exists!"));
     }
 
     @Override
-    public Category updateCategory(Long id, Category category) {
-        return Optional.ofNullable(getCategoryById(id))
+    public CategoryDto updateCategory(Long id, Category category) {
+        return Optional
+                .ofNullable(categoryRepository.findById(id)
+                        .orElseThrow(() -> new ResourceNotFoundException("Category not found!")))
                 .map(oldCategory -> {
                     oldCategory.setName(category.getName());
-                    return categoryRepository.save(oldCategory);
+                    Category updatedCategory = categoryRepository.save(oldCategory);
+
+                    return mapToCategoryDto(updatedCategory);
                 })
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found!"));
     }

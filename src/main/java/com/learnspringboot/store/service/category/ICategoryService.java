@@ -2,18 +2,19 @@ package com.learnspringboot.store.service.category;
 
 import java.util.List;
 
+import com.learnspringboot.store.dto.CategoryDto;
 import com.learnspringboot.store.model.Category;
 
 public interface ICategoryService {
-    Category getCategoryById(Long id);
+    CategoryDto getCategoryById(Long id);
 
-    Category getCategoryByName(String name);
+    CategoryDto getCategoryByName(String name);
 
-    List<Category> getAllCategories();
+    List<CategoryDto> getAllCategories();
 
-    Category createCategory(Category category);
+    CategoryDto createCategory(Category category);
 
-    Category updateCategory(Long id, Category category);
+    CategoryDto updateCategory(Long id, Category category);
 
     void deleteCategory(Long id);
 }

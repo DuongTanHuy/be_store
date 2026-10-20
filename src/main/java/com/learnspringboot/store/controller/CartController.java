@@ -24,25 +24,25 @@ public class CartController {
 
     @GetMapping
     public ResponseEntity<ApiResponse> getCartById(@PathVariable Long id) {
-        CartDto cartDto = cartService.getCart(id);
+        CartDto cartDto = cartService.getCartById(id);
         return ResponseEntity.ok(new ApiResponse("Get cart successfully!", cartDto));
     }
 
     @GetMapping("/total")
-    public ResponseEntity<ApiResponse> getTotalPrice(@PathVariable Long id) {
-        BigDecimal totalPrice = cartService.getTotalPrice(id);
+    public ResponseEntity<ApiResponse> getTotalPriceById(@PathVariable Long id) {
+        BigDecimal totalPrice = cartService.getTotalPriceById(id);
         return ResponseEntity.ok(new ApiResponse("Get total price successfully!", totalPrice));
     }
 
     @DeleteMapping("/clear")
-    public ResponseEntity<ApiResponse> clearCart(@PathVariable Long id) {
-        cartService.clearCart(id);
+    public ResponseEntity<ApiResponse> clearCartById(@PathVariable Long id) {
+        cartService.clearCartById(id);
         return ResponseEntity.ok(new ApiResponse("Clear successfully!", null));
     }
 
     @DeleteMapping
-    public ResponseEntity<ApiResponse> deleteCart(@PathVariable Long id) {
-        cartService.deleteCart(id);
+    public ResponseEntity<ApiResponse> deleteCartById(@PathVariable Long id) {
+        cartService.deleteCartById(id);
         return ResponseEntity.ok(new ApiResponse("Delete successfully!", null));
     }
 

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.learnspringboot.store.dto.CategoryDto;
 import com.learnspringboot.store.model.Category;
 import com.learnspringboot.store.response.ApiResponse;
 import com.learnspringboot.store.service.category.ICategoryService;
@@ -28,32 +29,32 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAllCategories() {
-        List<Category> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok().body(new ApiResponse("Get all categories successfully!", categories));
+        List<CategoryDto> categoryDtos = categoryService.getAllCategories();
+        return ResponseEntity.ok().body(new ApiResponse("Get all categories successfully!", categoryDtos));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) {
-        Category category = categoryService.getCategoryById(id);
-        return ResponseEntity.ok(new ApiResponse("Get category successfully!", category));
+        CategoryDto categoryDto = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(new ApiResponse("Get category successfully!", categoryDto));
     }
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse> getCategoryByName(@RequestParam String name) {
-        Category category = categoryService.getCategoryByName(name);
-        return ResponseEntity.ok(new ApiResponse("Get category successfully!", category));
+        CategoryDto categoryDto = categoryService.getCategoryByName(name);
+        return ResponseEntity.ok(new ApiResponse("Get category successfully!", categoryDto));
     }
 
     @PostMapping
     public ResponseEntity<ApiResponse> addCategory(@RequestBody Category category) {
-        Category newCategory = categoryService.createCategory(category);
-        return ResponseEntity.ok(new ApiResponse("Create category successfully!", newCategory));
+        CategoryDto newCategoryDto = categoryService.createCategory(category);
+        return ResponseEntity.ok(new ApiResponse("Create category successfully!", newCategoryDto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id, @RequestBody Category category) {
-        Category updatedCategory = categoryService.updateCategory(id, category);
-        return ResponseEntity.ok(new ApiResponse("Update category successfully!", updatedCategory));
+        CategoryDto updatedCategoryDto = categoryService.updateCategory(id, category);
+        return ResponseEntity.ok(new ApiResponse("Update category successfully!", updatedCategoryDto));
     }
 
     @DeleteMapping("/{id}")

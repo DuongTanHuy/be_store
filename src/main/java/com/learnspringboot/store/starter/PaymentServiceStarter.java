@@ -1,6 +1,6 @@
 package com.learnspringboot.store.starter;
 
-public interface PaymentService {
+public interface PaymentServiceStarter {
 
     void processPayment(double amount);
 

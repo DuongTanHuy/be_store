@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class CartDto {
     private Long id;
+    private Long userId;
     private BigDecimal totalAmount;
     private Set<CartItemDto> items;
 }

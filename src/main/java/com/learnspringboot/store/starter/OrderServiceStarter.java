@@ -5,15 +5,15 @@ import org.springframework.stereotype.Component;
 
 // @Service
 @Component
-public class OrderService {
-    private PaymentService paymentService;
+public class OrderServiceStarter {
+    private PaymentServiceStarter paymentService;
 
     // nếu chỉ có 1 contructor thì không cần @Autowired
-    public OrderService() {
+    public OrderServiceStarter() {
     }
 
     @Autowired
-    public OrderService(PaymentService paymentService) {
+    public OrderServiceStarter(PaymentServiceStarter paymentService) {
         this.paymentService = paymentService;
     }
 
@@ -21,7 +21,7 @@ public class OrderService {
         paymentService.processPayment(10);
     }
 
-    public void setPaymentService(PaymentService paymentService) {
+    public void setPaymentService(PaymentServiceStarter paymentService) {
         this.paymentService = paymentService;
     }
 }
