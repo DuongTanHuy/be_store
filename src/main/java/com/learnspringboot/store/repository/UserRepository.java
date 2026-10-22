@@ -11,3 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = "roles")
     User findByEmail(String email);
 }
+
+// khi sử dụng LAZY (model user)
+// nếu muốn lấy thông tin của role phải thêm @EntityGraph

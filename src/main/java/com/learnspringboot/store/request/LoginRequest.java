@@ -15,3 +15,5 @@ public class LoginRequest {
     @NotBlank(message = "Password is required")
     private String password;
 }
+
+// phải dùng @Valid ở controller thì @NotBlank ở request mới có tác dụng

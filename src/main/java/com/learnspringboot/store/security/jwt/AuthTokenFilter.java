@@ -45,10 +45,15 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails,
-                    null,
+                    null, // xác thực bằng JWT nên không cần password
                     userDetails.getAuthorities());
 
+            // Set thông tin chi tiết của request vào authentication (để lưu trữ IP,
+            // session)
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            // Set authentication vào SecurityContextHolder
+            // Từ đây có thể truy cập authentication từ bất kỳ đâu trong request
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
@@ -57,3 +62,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     }
 
 }
+
+// Mỗi request đều phải đi qua AuthTokenFilter, nếu request có jwt thì sẽ
+// validate token, nếu token hợp lệ thì sẽ set authentication vào
+// SecurityContextHolder
+
+// Sử dụng cơ chế ThreadLocal để lưu trữ authentication trong suốt quá trình xử
+// lý request (sau khi set authentication vào SecurityContextHolder thì có thể
+// truy cập authentication từ bất kỳ đâu trong request)
+// Lưu ý: chỉ lưu trữ authentication trong request hiện tại, không lưu trữ qua
+// các request khác (mỗi request là một thread khác nhau)

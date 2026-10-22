@@ -35,3 +35,5 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         mapper.writeValue(response.getOutputStream(), body);
     }
 }
+
+// Xử lý lỗi khi access denied

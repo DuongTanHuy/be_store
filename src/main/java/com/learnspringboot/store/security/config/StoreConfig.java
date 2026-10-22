@@ -77,20 +77,28 @@ public class StoreConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable()) // Tắt csrf (vì dùng jwt)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Cấu hình CORS
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(authEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .authenticationEntryPoint(authEntryPoint) // Xử lý khi không có token hoặc token không hợp lệ
+                        .accessDeniedHandler(accessDeniedHandler)) // Xử lý khi không có quyền truy cập
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Không sử dụng session
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/public/**").permitAll()
-                        .requestMatchers(SECURED_URLS.toArray(String[]::new)).authenticated()
-                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
-                .authenticationProvider(authenticationProvider())
-                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/public/**")
+                        .permitAll() // Cho phép truy cập public api
+                        .requestMatchers(SECURED_URLS.toArray(String[]::new))
+                        .authenticated() // Yêu cầu token cho các api trong SECURED_URLS
+                        .requestMatchers("/api/v1/admin/**")
+                        .hasRole("ADMIN") // Yêu cầu quyền ADMIN cho các api admin
+                        .anyRequest().authenticated()) // Tất cả các api khác đều yêu cầu token
+                .authenticationProvider(authenticationProvider()) // Cấu hình authentication provider
+                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class); // Các request sẽ đi qua
+                                                                                               // AuthTokenFilter
 
         return http.build();
     }
 }
+
+// Tạo bean cho các class dùng chung
+// Cấu hình security, CORS, authentication provider, security filter chain

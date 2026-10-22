@@ -34,3 +34,5 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
     }
 
 }
+
+// Xử lý lỗi khi authentication

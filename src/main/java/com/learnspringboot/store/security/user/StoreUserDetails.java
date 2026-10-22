@@ -71,5 +71,6 @@ public class StoreUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }
+
+// Dùng để tạo object UserDetails (gồm email, password, roles) từ User

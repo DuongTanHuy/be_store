@@ -67,3 +67,5 @@ public class JwtUtils {
         }
     }
 }
+
+// Dùng để tạo token, validate token, lấy thông tin từ token

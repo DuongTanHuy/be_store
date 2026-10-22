@@ -30,9 +30,15 @@ public class AuthController {
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest request) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        SecurityContextHolder.getContext().setAuthentication(authentication); // có thể không cần vì sau khi login không
+                                                                              // dùng gì liên quan đến SecurityContext
+                                                                              // (SecurityContext sẽ bị clear sau khi
+                                                                              // thread kết thúc)
+
         String token = jwtUtils.generateToken(authentication);
         StoreUserDetails userDetails = (StoreUserDetails) authentication.getPrincipal();
+
         JwtResponse jwtResponse = new JwtResponse(userDetails.getId(), token);
         return ResponseEntity.ok(new ApiResponse("Login successfully!", jwtResponse));
     }

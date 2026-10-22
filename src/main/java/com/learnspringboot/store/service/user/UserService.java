@@ -70,6 +70,8 @@ public class UserService implements IUserService {
 
     @Override
     public User getAuthenticateUser() {
+        // request phải đi qua AuthTokenFilter (đã set authentication vào
+        // SecurityContextHolder) thì mới có thể lấy được authentication
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         User user = Optional.ofNullable(userRepository.findByEmail(email))

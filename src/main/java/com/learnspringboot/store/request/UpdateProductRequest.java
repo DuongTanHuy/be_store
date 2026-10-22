@@ -24,3 +24,6 @@ public class UpdateProductRequest {
 
     private String category;
 }
+
+// phải dùng @Valid ở controller thì @Size, @DecimalMin, @Min ở request mới có
+// tác dụng

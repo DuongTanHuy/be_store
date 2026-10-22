@@ -52,3 +52,6 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
 }
+
+// LAZY: chỉ lấy thông tin của role khi cần
+// EAGER: lấy luôn thông tin của role khi lấy thông tin user
