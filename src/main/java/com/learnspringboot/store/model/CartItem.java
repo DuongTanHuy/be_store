@@ -39,8 +39,13 @@ public class CartItem {
     }
 }
 
-// Tồn tại phụ thuộc vào Cart, không độc lập
+// CartItem tồn tại phụ thuộc vào Cart, không độc lập, nó phải có quan hệ 2
+// chiều với Cart để:
+// Từ Cart → cần lấy danh sách CartItem (để hiển thị giỏ hàng, tính tổng tiền…)
+// Từ CartItem → cần biết nó thuộc Cart nào (để cascade, orphanRemoval, đồng
+// bộ…)
+
 // Thêm, cập nhât, xóa cartItem phải luôn thông qua Cart
-// CartItem là Owning side
+// CartItem là Owning side (chứa foreign key)
 // Cart là Inverse side (thường có cascade và orphanRemoval=true) để khi thao
 // tác Cart thì CartItem cũng được thao tác theo

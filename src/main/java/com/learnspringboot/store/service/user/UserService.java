@@ -3,6 +3,9 @@ package com.learnspringboot.store.service.user;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.learnspringboot.store.dto.UserDto;
@@ -20,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     private UserDto mapToUserDto(User user) {
         return modelMapper.map(user, UserDto.class);
@@ -42,7 +46,7 @@ public class UserService implements IUserService {
                     newUser.setFirstName(req.getFirstName());
                     newUser.setLastName(req.getLastName());
                     newUser.setEmail(req.getEmail());
-                    newUser.setPassword(req.getPassword());
+                    newUser.setPassword(passwordEncoder.encode(req.getPassword()));
 
                     return mapToUserDto(userRepository.save(newUser));
                 }).orElseThrow(() -> new AlreadyExistsException(request.getEmail() + " already exists!"));
@@ -62,6 +66,16 @@ public class UserService implements IUserService {
     public void deleteUser(Long id) {
         userRepository.findById(id).ifPresentOrElse(userRepository::delete,
                 () -> new ResourceNotFoundException("User not found!"));
+    }
+
+    @Override
+    public User getAuthenticateUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = Optional.ofNullable(userRepository.findByEmail(email))
+                .orElseThrow(() -> new ResourceNotFoundException("User not found!"));
+
+        return user;
     }
 
 }

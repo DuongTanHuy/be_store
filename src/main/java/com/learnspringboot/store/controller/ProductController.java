@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,12 +49,14 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse("Get product by ID successfully!", product));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ApiResponse> createProduct(@RequestBody AddProductRequest request) {
         ProductDto product = productService.createProduct(request);
         return ResponseEntity.ok(new ApiResponse("Create product successfully!", product));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long id,
             @Valid @RequestBody UpdateProductRequest request) {
@@ -61,6 +64,7 @@ public class ProductController {
         return ResponseEntity.ok(new ApiResponse("Update product successfully!", product));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProductById(id);

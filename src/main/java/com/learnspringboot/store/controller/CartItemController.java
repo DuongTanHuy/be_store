@@ -4,14 +4,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learnspringboot.store.exceptions.ResourceNotFoundException;
 import com.learnspringboot.store.model.Cart;
 import com.learnspringboot.store.model.User;
-import com.learnspringboot.store.repository.UserRepository;
 import com.learnspringboot.store.request.AddCartItemRequest;
 import com.learnspringboot.store.response.ApiResponse;
 import com.learnspringboot.store.service.cart.ICartItemService;
 import com.learnspringboot.store.service.cart.ICartService;
+import com.learnspringboot.store.service.user.IUserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,13 +27,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class CartItemController {
     private final ICartItemService cartItemService;
     private final ICartService cartService;
-    private final UserRepository userRepository;
+    private final IUserService userService;
 
     @PostMapping("items")
     public ResponseEntity<ApiResponse> addCartItem(
             @RequestBody AddCartItemRequest request) {
 
-        User user = userRepository.findById(2L).orElseThrow(() -> new ResourceNotFoundException("User not found!"));
+        User user = userService.getAuthenticateUser();
         Cart cart = cartService.initializeNewCart(user);
 
         cartItemService.addItemToCart(cart.getId(), request.getProductId(), request.getQuantity());

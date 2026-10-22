@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.learnspringboot.store.dto.ProductDto;
+import com.learnspringboot.store.exceptions.AlreadyExistsException;
 import com.learnspringboot.store.exceptions.ResourceNotFoundException;
 import com.learnspringboot.store.model.Category;
 import com.learnspringboot.store.model.Product;
@@ -70,6 +71,10 @@ public class ProductService implements IProductService {
                 });
     }
 
+    private boolean isProductExist(String name, String brand) {
+        return productRepository.existsByNameAndBrand(name, brand);
+    }
+
     private Product createProduct(AddProductRequest request, Category category) {
         return new Product(
                 request.getName(),
@@ -95,6 +100,10 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductDto createProduct(AddProductRequest request) {
+        if (isProductExist(request.getName(), request.getBrand())) {
+            throw new AlreadyExistsException("Product already exists!");
+        }
+
         Category category = handleCategory(request.getCategory());
         // request.setCategory(category);
         Product product = productRepository.save(createProduct(request, category));

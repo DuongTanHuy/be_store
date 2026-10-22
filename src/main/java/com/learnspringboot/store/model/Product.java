@@ -48,4 +48,5 @@ public class Product {
 }
 
 // Tồn tại độc lập
-// chỉ cần CartItem biết product là đủ, không cần quan hệ 2 chiều
+// Về nghiệp vụ thì chỉ cần CartItem biết product là đủ, không cần quan hệ 2
+// chiều
